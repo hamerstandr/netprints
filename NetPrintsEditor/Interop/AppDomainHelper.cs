@@ -45,10 +45,14 @@ namespace NetPrintsEditor.Interop
 
             T domainObject = (T)domain.CreateInstanceFromAndUnwrap(
                     typeof(T).Assembly.Location, typeof(T).FullName);
-
-            // Load all assemblies that the current app domain is referencing
-            domainObject.Initialize(AppDomain.CurrentDomain.GetAssemblies().
-                Select(a => a.Location).ToArray());
+            try
+            {
+                // Load all assemblies that the current app domain is referencing
+                domainObject.Initialize(AppDomain.CurrentDomain.GetAssemblies().
+                    Select(a => a.Location).ToArray());
+            }
+            catch { }
+            
             
             return new AppDomainObject<T>(domain, domainObject);
         }
